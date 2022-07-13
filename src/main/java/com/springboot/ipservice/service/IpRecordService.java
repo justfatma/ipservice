@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import javax.validation.ConstraintViolationException;
 import org.apache.commons.validator.routines.InetAddressValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.springboot.ipservice.entity.IpRecord;
@@ -18,6 +20,7 @@ import com.springboot.ipservice.repository.IpRecordRepository;
 @Service
 public class IpRecordService {
 
+  Logger logger = LoggerFactory.getLogger(IpRecordService.class);
 
   @Autowired
   private IpRecordRepository ipRecordRepository;
@@ -40,6 +43,9 @@ public class IpRecordService {
 
     try {
       IpRecord savedIpRecord = ipRecordRepository.save(ipRecord);
+
+      logger.info("saveIpRecord " + ipRecord.getIpValue() + " is saved successfully.");
+
       response.setData(savedIpRecord.getId());
       response.setErrorCode(0L);
       response.setErrorMessage("");
@@ -47,6 +53,7 @@ public class IpRecordService {
       response.setData("");
       response.setErrorCode(102L);
       response.setErrorMessage(e.getConstraintViolations().toString());
+      logger.debug("saveIpRecord  constraint violation");
     }
     return response;
   }
@@ -85,6 +92,7 @@ public class IpRecordService {
       response.setErrorCode(ErrorEnum.IPTYPE.getId());
       response.setErrorMessage(ErrorEnum.IPTYPE.getMessage());
       response.setData("");
+      logger.info("validateModel " + model.getIpType() + " is not valid.");
       return response;
     }
 
@@ -92,6 +100,8 @@ public class IpRecordService {
       response.setErrorCode(ErrorEnum.IPTYPE_IPVALUE.getId());
       response.setErrorMessage(ErrorEnum.IPTYPE_IPVALUE.getMessage());
       response.setData("");
+      logger.info(
+          "validateModel " + model.getIpType() + " " + model.getIpValue() + " are not valid.");
       return response;
     }
 
@@ -100,6 +110,7 @@ public class IpRecordService {
       response.setErrorCode(ErrorEnum.FIRST_SEEN.getId());
       response.setErrorMessage(ErrorEnum.FIRST_SEEN.getMessage());
       response.setData("");
+      logger.info("validateModel " + model.getFirstSeen() + " is not valid.");
       return response;
     }
 
@@ -107,6 +118,7 @@ public class IpRecordService {
       response.setErrorCode(ErrorEnum.TOTAL_COUNT.getId());
       response.setErrorMessage(ErrorEnum.TOTAL_COUNT.getMessage());
       response.setData("");
+      logger.info("validateModel " + model.getTotalCount() + " is not valid.");
       return response;
     }
 
