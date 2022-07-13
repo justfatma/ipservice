@@ -6,7 +6,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,9 +30,7 @@ public class DateValidationService {
         try {
           Date dateInfo = simpleDateFormat.parse(dateStr);
 
-          TimeZone tz = TimeZone.getTimeZone("UTC");
-          DateFormat df = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-          df.setTimeZone(tz);
+          DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
           return df.format(dateInfo);
 
         } catch (ParseException e) {
